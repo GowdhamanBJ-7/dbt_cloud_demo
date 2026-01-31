@@ -41,7 +41,7 @@ clv_calculation AS (
         CASE 
             WHEN COUNT(DISTINCT revenue_month) >= 3 THEN
                 SUM(monthly_revenue) + (AVG(monthly_revenue) * 6)  -- 6 month projection
-            ELSE total_spent
+            ELSE SUM(monthly_revenue)
         END AS predicted_clv_6m
         
     FROM monthly_revenue
