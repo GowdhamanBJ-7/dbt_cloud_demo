@@ -34,7 +34,7 @@ order_items_agg AS (
         SUM(oi.quantity) AS total_quantity,
         AVG(p.price) AS avg_product_price,
         SUM(p.margin * oi.quantity) AS total_margin
-    FROM {{ source('raw_ecommerce', 'order_items') }} oi
+    FROM {{ ref("stg_order_items") }} oi
     JOIN {{ ref('stg_products') }} p
         ON oi.product_id = p.product_id
     GROUP BY 1

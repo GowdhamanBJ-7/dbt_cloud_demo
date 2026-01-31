@@ -44,7 +44,7 @@ models:
     intermediate:
       +materialized: view
       +schema: intermediate
-    marts:
+    mart:
       +materialized: table
       +schema: marts
       core:

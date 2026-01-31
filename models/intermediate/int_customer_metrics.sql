@@ -1,3 +1,6 @@
+-- Purpose: Business logic + aggregations
+-- How valuable is each customer?
+
 {{ config(materialized='view') }}
 
 WITH customer_orders AS (
@@ -41,3 +44,10 @@ customer_segments AS (
 )
 
 SELECT * FROM customer_segments
+
+-- Output (1 row per customer):
+-- totalorders
+-- totalspent
+-- avgordervalue
+-- customersegment
+-- valuesegment

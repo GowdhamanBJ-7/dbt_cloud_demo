@@ -1,7 +1,8 @@
 {{ config(materialized='view') }}
+-- Purpose: Clean, standardize, rename, filter
 
-WITH source_data AS (
-    SELECT * FROM {{ source('raw_ecommerce', 'customers') }}
+with source_data as(
+    select * from {{ source('raw_ecommerce', 'customers')}}
 ),
 
 cleaned AS (
@@ -11,12 +12,12 @@ cleaned AS (
         TRIM(first_name) AS first_name,
         TRIM(last_name) AS last_name,
         CASE 
-            WHEN phone RLIKE '^[0-9+\-\s\(\)]+$' THEN phone 
+            WHEN phone RLIKE '^[0-9]+$' THEN phone 
             ELSE NULL 
         END AS phone,
         registration_date,
         CASE 
-            WHEN country_code IN ('US', 'CA', 'UK', 'DE', 'FR', 'AU') 
+            WHEN country_code IN ('US', 'CA', 'UK', 'IND') 
             THEN country_code 
             ELSE 'OTHER' 
         END AS country_code,
@@ -30,8 +31,7 @@ cleaned AS (
         created_at,
         updated_at
     FROM source_data
-    WHERE email IS NOT NULL
-      AND registration_date >= '2020-01-01'  -- Data quality filter
+    WHERE email IS NOT NULL AND registration_date >= '2020-01-01'  -- Data quality filter
 )
 
 SELECT * FROM cleaned
