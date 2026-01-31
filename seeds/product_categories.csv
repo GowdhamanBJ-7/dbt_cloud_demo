@@ -1,0 +1,11 @@
+category_id,category_name,parent_category_id,margin_target,is_active
+1,Electronics,,0.25,true
+2,Smartphones,1,0.30,true
+3,Laptops,1,0.20,true
+4,Clothing,,0.60,true
+5,Men's Clothing,4,0.55,true
+6,Women's Clothing,4,0.65,true
+7,Home & Garden,,0.40,true
+8,Furniture,7,0.45,true
+9,Books,,0.50,true
+10,Sports,,0.35,true

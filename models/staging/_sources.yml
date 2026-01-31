@@ -1,0 +1,47 @@
+version: 2
+
+sources:
+  - name: raw_ecommerce
+    description: "Raw e-commerce data from operational systems"
+    database: tech_session
+    schema: ecommerce_analytics_source
+    tables:
+      - name: customers
+        description: "Customer master data"
+        columns:
+          - name: customer_id
+            description: "Primary key"
+            tests:
+              - unique
+              - not_null
+          - name: email
+            description: "Customer email address"
+            tests:
+              - unique
+              - not_null
+          - name: registration_date
+            description: "Account creation date"
+            tests:
+              - not_null
+          
+      - name: orders
+        description: "Order transactions"
+        columns:
+          - name: order_id
+            description: "Primary key"
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            description: "Foreign key to customers"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw_ecommerce', 'customers')
+                  field: customer_id
+                  
+      - name: order_items
+        description: "Individual items within orders"
+        
+      - name: products
+        description: "Product catalog"
