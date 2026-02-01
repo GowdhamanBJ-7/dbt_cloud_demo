@@ -7,6 +7,7 @@
 WITH monthly_metrics AS (
 
     SELECT
+        -- Month bucket (Spark SQL syntax)
         DATE_TRUNC('month', order_date) AS revenue_month,
 
         -- Order metrics
@@ -27,9 +28,9 @@ WITH monthly_metrics AS (
     WHERE is_successful_order = TRUE
 
     {% if is_incremental() %}
-        -- Reprocess last 2 months to handle late-arriving data
+        -- Reprocess last 2 months (Spark SQL)
         AND order_date >= (
-            SELECT DATEADD('month', -2, MAX(revenue_month))
+            SELECT ADD_MONTHS(MAX(revenue_month), -2)
             FROM {{ this }}
         )
     {% endif %}
@@ -40,13 +41,21 @@ WITH monthly_metrics AS (
 growth_metrics AS (
 
     SELECT
-        *,
+        revenue_month,
+        total_orders,
+        unique_customers,
+        gross_revenue,
+        total_tax,
+        total_shipping,
+        total_discounts,
+        total_margin,
+        avg_order_value,
 
-        -- Previous period metrics
+        -- Previous period values
         LAG(gross_revenue) OVER (ORDER BY revenue_month) AS prev_month_revenue,
         LAG(total_orders) OVER (ORDER BY revenue_month) AS prev_month_orders,
 
-        -- Growth %
+        -- Revenue growth %
         CASE
             WHEN LAG(gross_revenue) OVER (ORDER BY revenue_month) > 0
             THEN
@@ -55,6 +64,7 @@ growth_metrics AS (
             ELSE NULL
         END AS revenue_growth_pct,
 
+        -- Order growth %
         CASE
             WHEN LAG(total_orders) OVER (ORDER BY revenue_month) > 0
             THEN
@@ -63,7 +73,7 @@ growth_metrics AS (
             ELSE NULL
         END AS order_growth_pct,
 
-        -- Profitability
+        -- Profitability %
         total_margin / NULLIF(gross_revenue, 0) * 100 AS margin_percentage
 
     FROM monthly_metrics

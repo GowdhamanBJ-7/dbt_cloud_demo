@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: "Fact table containing completed customer orders"
+    columns:
+      - name: total_amount
+        description: "Total order value"
+        tests:
+          - positive_values:
+              column_name: total_amount
+
+      - name: tax_amount
+        description: "Tax applied to order"
+        tests:
+          - positive_values:
+              column_name: tax_amount
+
+      - name: shipping_amount
+        description: "Shipping charges"
+        tests:
+          - positive_values:
+              column_name: shipping_amount
+
+      - name: days_since_registration
+        tests:
+          - positive_values: 
+              column_name: days_since_registration
+              severity: warn
