@@ -10,6 +10,7 @@ models:
           - positive_values:
               arguments: # Add this
                 column_name: total_amount
+              severity: warn
 
       - name: tax_amount
         description: "Tax applied to order"
@@ -17,6 +18,7 @@ models:
           - positive_values:
               arguments: # Add this
                 column_name: tax_amount
+              severity: warn
 
       - name: shipping_amount
         description: "Shipping charges"
@@ -24,6 +26,7 @@ models:
           - positive_values:
               arguments: # Add this
                 column_name: shipping_amount
+              severity: warn
 
       - name: days_since_registration
         tests:
@@ -31,3 +34,4 @@ models:
               severity: warn # Config stays at top level
               arguments:     # Add this for the test logic
                 column_name: days_since_registration
+              
