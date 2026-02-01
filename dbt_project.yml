@@ -47,12 +47,14 @@ models:
       +materialized: view
       +schema: intermediate
     mart:
-      database: dbt_catalog_cloud
+      +catalog: dbt_catalog_cloud
       +materialized: table
       +schema: marts
       core:
+        +catalog: dbt_catalog_cloud
         +materialized: table
       finance:
+        +catalog: dbt_catalog_cloud
         +materialized: incremental
         +on_schema_change: "fail"
 
