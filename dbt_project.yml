@@ -51,8 +51,10 @@ models:
       +materialized: table
       +schema: marts
       core:
+        database: dbt_catalog_cloud
         +materialized: table
       finance:
+        database: dbt_catalog_cloud
         +materialized: incremental
         +on_schema_change: "fail"
 
