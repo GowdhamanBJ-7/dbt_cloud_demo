@@ -74,3 +74,5 @@ seeds:
 
 tests:
   +catalog: dbt_catalog_cloud
+flags:
+  use_managed_iceberg: true
