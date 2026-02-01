@@ -68,3 +68,9 @@ snapshots:
     +target_schema: snapshots
     +strategy: timestamp
     +updated_at: updated_at
+
+seeds:
+  +catalog: dbt_catalog_cloud
+
+tests:
+  +catalog: dbt_catalog_cloud
