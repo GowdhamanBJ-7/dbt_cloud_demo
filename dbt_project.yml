@@ -76,3 +76,4 @@ tests:
   database: dbt_catalog_cloud
 flags:
   use_materialization_v2: true
+  use_managed_iceberg: true
