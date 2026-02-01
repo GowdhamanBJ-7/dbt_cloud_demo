@@ -64,6 +64,7 @@ vars:
 
 snapshots:
   ecommerce_analytics:
+    +catalog: dbt_catalog_cloud 
     +target_schema: snapshots
     +strategy: timestamp
     +updated_at: updated_at
