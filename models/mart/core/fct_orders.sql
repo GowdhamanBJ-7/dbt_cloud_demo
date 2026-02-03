@@ -36,3 +36,5 @@ WHERE is_successful_order = TRUE
 {% if is_incremental() %}
     AND updated_at > (SELECT MAX(updated_at) FROM {{ this }})
 {% endif %}
+
+

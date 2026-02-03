@@ -1,37 +1,36 @@
-{{ config(materialized='view') }}
+{{ config(materialized="view") }}
 -- Purpose: Clean, standardize, rename, filter
+with
+    source_data as (select * from {{ source("raw_ecommerce", "customers") }}),
 
-with source_data as(
-    select * from {{ source('raw_ecommerce', 'customers')}}
-),
+    cleaned as (
+        select
+            customer_id,
+            trim(lower(email)) as email,
+            trim(first_name) as first_name,
+            trim(last_name) as last_name,
+            CASE
+            WHEN phone IS NOT NULL THEN
+                REGEXP_REPLACE(phone, '[^0-9]', '')
+            END AS phone_clean,
+            registration_date,
+            case
+                when country_code in ('US', 'CA', 'UK', 'IND')
+                then country_code
+                else 'OTHER'
+            end as country_code,
+            date_of_birth,
+            case
+                when gender in ('M', 'F', 'Male', 'Female')
+                then upper(left(gender, 1))
+                else 'U'
+            end as gender,
+            is_active,
+            created_at,
+            updated_at
+        from source_data
+        where email is not null and registration_date >= '2020-01-01'  -- Data quality filter
+    )
 
-cleaned AS (
-    SELECT
-        customer_id,
-        TRIM(LOWER(email)) AS email,
-        TRIM(first_name) AS first_name,
-        TRIM(last_name) AS last_name,
-        CASE 
-            WHEN phone RLIKE '^[0-9]+$' THEN phone 
-            ELSE NULL 
-        END AS phone,
-        registration_date,
-        CASE 
-            WHEN country_code IN ('US', 'CA', 'UK', 'IND') 
-            THEN country_code 
-            ELSE 'OTHER' 
-        END AS country_code,
-        date_of_birth,
-        CASE 
-            WHEN gender IN ('M', 'F', 'Male', 'Female') 
-            THEN UPPER(LEFT(gender, 1)) 
-            ELSE 'U' 
-        END AS gender,
-        is_active,
-        created_at,
-        updated_at
-    FROM source_data
-    WHERE email IS NOT NULL AND registration_date >= '2020-01-01'  -- Data quality filter
-)
-
-SELECT * FROM cleaned
+select *
+from cleaned

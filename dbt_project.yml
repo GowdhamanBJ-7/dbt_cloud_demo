@@ -58,6 +58,7 @@ models:
         +materialized: incremental
         +on_schema_change: "fail"
 
+# project-level runtime variables
 vars:
   #data range for incremental processing
   start_date: '2023-01-01'
@@ -79,4 +80,4 @@ tests:
 flags:
   use_materialization_v2: true
   use_managed_iceberg: true
-  
+  # Databricks + Unity Catalog specific.
